@@ -1,0 +1,9 @@
+{
+    "nrecords" : 4000, 
+    "desc" : "Survey of ambulatory surgery conducted from 2016 to 2018. Data collected includes patient demographics, information about the surgical procedure(s), and patient diagnoses.",
+    "did" : "did:sov:2wJPyULfLLnYTEFYzByfUR",
+    "schema" : [{"name": "age", "type": "Q"},
+                {"name": "zip", "type": "Q"},
+                {"name": "symptom", "type": "C"}, 
+                {"name": "medical_procedure", "type": "C"}]
+}
