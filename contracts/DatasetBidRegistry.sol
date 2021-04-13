@@ -28,7 +28,7 @@ contract DatasetBidRegistry is Ownable {
    struct Bid{
        string expiry_date; // Standard human readable date, ISO 8601 UTC
        bytes hash_spec;    // IPFS address to the claim file. 
-       uint amount;        // Amount in Ether for the bid.
+       uint amount;        // Amount in wei for the bid.
        string tag;	      // Keyword
    }
 
@@ -39,7 +39,7 @@ contract DatasetBidRegistry is Ownable {
       address payable offerer;  // address of the offerer. .  
       address bidder;   // bidder and bid_number identify the bid.
       uint bid_number;
-      uint value;       // price proposed, in Ether.
+      uint value;       // price proposed, in wei.
       bool completed;
    }
 
@@ -54,7 +54,8 @@ contract DatasetBidRegistry is Ownable {
           address from,
           address to,
           uint bid_number,   
-          uint offer_number
+          uint offer_number,
+          uint value
    );
 
    // The bids per bidder.
@@ -83,7 +84,7 @@ contract DatasetBidRegistry is Ownable {
    */
   function bidinfo(address bidder, uint pos) public view 
             returns (string memory expiry_date, bytes memory hash_spec, uint amount, string memory tag){
-      Bid memory b = bids[bidder][pos];
+     Bid memory b = bids[bidder][pos];
      return (b.expiry_date, b.hash_spec, b.amount, b.tag);
   }
   /**
@@ -92,21 +93,22 @@ contract DatasetBidRegistry is Ownable {
    * Expiry dates of bids are considered informative and not checked inside the contract,
    * it is expected that clients do the check. 
    */
-   function offer(address payable offerer, address recp, uint bidno, uint price) public {
-         offers[recp][bidno].push(Offer(offerer, recp, bidno, price, false));
-         emit OfferRegistered(msg.sender, recp, bidno, offers[recp][bidno].length - 1);
+   function offer(address payable offerer, address bidder, uint bidno, uint price) public {
+         offers[bidder][bidno].push(Offer(offerer, bidder, bidno, price, false));
+         emit OfferRegistered(offerer, bidder, bidno, offers[bidder][bidno].length - 1, price);
    }
 
    /**
     * The bidder accepts and finalize an offer. 
     * 
+    * Note bidder is the transaction sender.
     */
-   function finalize(address recp, uint bidno, uint offerno) public payable{
-        assert(msg.sender == offers[recp][bidno][offerno].bidder);
-        assert(msg.value == offers[recp][bidno][offerno].value);
-        offers[recp][bidno][offerno].completed = true;
+   function finalize(address offerer, uint bidno, uint offerno) public payable{
+        assert(msg.value==offers[msg.sender][bidno][offerno].value);
+        assert(msg.sender==offers[msg.sender][bidno][offerno].bidder);
+        offers[msg.sender][bidno][offerno].completed = true;
         // Transfer the value.
-	     offers[recp][bidno][offerno].offerer.transfer(msg.value);
+	     offers[msg.sender][bidno][offerno].offerer.transfer(msg.value);
    } 
 
 }

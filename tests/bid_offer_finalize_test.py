@@ -10,11 +10,12 @@ import os
 import datetime as dt
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def registry():
     '''Deploys a singleton dataset bid registry
     '''
     return accounts[0].deploy(DatasetBidRegistry)
+
 
 
 def create_ipfs_multihash(content: bytes):
@@ -27,6 +28,7 @@ def create_ipfs_multihash(content: bytes):
     function = int(18).to_bytes(1, byteorder='big')
     size = content_hash.digest_size.to_bytes(1, byteorder='big')
     return base58.b58encode(function + size + content_hash.digest())
+
 
 def create_signed_claim_hash(dataset_spec_file : str):
     ''' Assembles a claim for a dataset spec file.
@@ -47,6 +49,7 @@ def test_ownership(registry):
     '''
     assert(accounts[0] == registry.owner())
 
+@pytest.mark.order(1)
 def test_register(registry):
     '''Tests a single registry of a bid. No IPFS testing involved. 
     '''
@@ -63,14 +66,22 @@ def test_register(registry):
     assert(expiry_date==timestamp)
     assert(amount==1000)    
 
-
+@pytest.mark.order(2)
 def test_offer(registry):
+    '''Test the offer for a given bid.
     '''
-    '''
-    pass
+    # Offer from account[2] 
+    tx = registry.offer(accounts[2], accounts[1], 0, 1005)
+    offerer, bidder, bid_number, offer_number, value = tx.events[0].values()
+    assert(offerer==accounts[2])
+    assert(bidder==accounts[1])
+    assert(value==1005)
 
-
+@pytest.mark.order(3)
 def test_finalize(registry):
+    '''Test the finalization of an offer.
     '''
-    '''
-    pass
+    before = accounts[2].balance()
+    tx = registry.finalize(accounts[2], 0, 0, {'from': accounts[1], 'amount':1005})
+    after = accounts[2].balance()
+    assert(after == before + 1005)
