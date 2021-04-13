@@ -48,6 +48,8 @@ def test_ownership(registry):
     assert(accounts[0] == registry.owner())
 
 def test_register(registry):
+    '''Tests a single registry of a bid. No IPFS testing involved. 
+    '''
     with open(os.path.join(os.path.dirname(__file__), "sample_dataset_spec.json"), 'r') as f:
          spec_file = json.load(f)
     timestamp = (dt.datetime.now() +dt.timedelta(days=60)).isoformat()
@@ -60,3 +62,15 @@ def test_register(registry):
     expiry_date, hash_spec, amount, tag = registry.bidinfo(tx.events[0]['who'], tx.events[0]['position'])
     assert(expiry_date==timestamp)
     assert(amount==1000)    
+
+
+def test_offer(registry):
+    '''
+    '''
+    pass
+
+
+def test_finalize(registry):
+    '''
+    '''
+    pass

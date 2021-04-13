@@ -36,7 +36,7 @@ contract DatasetBidRegistry is Ownable {
     * An offer is issued by a dataset provider in response to an (active) bid. 
     */
    struct Offer{
-      address offerer;  // address of the offerer. .  
+      address payable offerer;  // address of the offerer. .  
       address bidder;   // bidder and bid_number identify the bid.
       uint bid_number;
       uint value;       // price proposed, in Ether.
@@ -92,13 +92,13 @@ contract DatasetBidRegistry is Ownable {
    * Expiry dates of bids are considered informative and not checked inside the contract,
    * it is expected that clients do the check. 
    */
-   function offer(address recp, uint bidno, uint price) public {
-         offers[recp][bidno].push(Offer(msg.sender, recp, bidno, price, false));
+   function offer(address payable offerer, address recp, uint bidno, uint price) public {
+         offers[recp][bidno].push(Offer(offerer, recp, bidno, price, false));
          emit OfferRegistered(msg.sender, recp, bidno, offers[recp][bidno].length - 1);
    }
 
    /**
-    * The bidder is able to accept and finalize an offer. 
+    * The bidder accepts and finalize an offer. 
     * 
     */
    function finalize(address recp, uint bidno, uint offerno) public payable{
@@ -106,7 +106,7 @@ contract DatasetBidRegistry is Ownable {
         assert(msg.value == offers[recp][bidno][offerno].value);
         offers[recp][bidno][offerno].completed = true;
         // Transfer the value.
-	     offers[recp][bidno][offerno].offerer.transfer(this.balance);
+	     offers[recp][bidno][offerno].offerer.transfer(msg.value);
    } 
 
 }
