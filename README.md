@@ -17,6 +17,13 @@ The smart contract and tests are developed using the [Brownie framework](https:/
 
 It should be noted that this repo contains the smart contract for expressing data needs and offers, but the eventual tranfer is intended to be done using some combination of DIDs and P2P secure transfer, as provided for example by the combination of Hyperledger Indy + Hyperledger Aries. 
 
+## Additional dependencies
+
+In addition to the dependencies used by Brownie, the tests require the following:
+
+* `base58==2.1.0`
+* `pytest-order==0.11.0`
+* `ecdsa==0.16.1`
 ## More info
 
 The complete design is in the document:
