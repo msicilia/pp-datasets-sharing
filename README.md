@@ -2,7 +2,7 @@
 
 This is a proof of concept implementation of a mechanism for disclosing requests for anonymized datasets in a network of participants. A typical setting would be that of some **data custodians** (e.g. hospitals or clinics) and a number of **data customers** (e.g. pharma companies or other). 
 
-The core idea is that data customers express preferences using digitally signed *claims* which express the need for a dataset with some given characteristics, set some intended price, and refer to *dataset specs* that detail the requirments. Specs are intended to be stored using some decentralized file system as IPFS, since they may be verbose. Then, data custodians become aware of the needs and elaborate the anonymized dataset from patient data taking into account the risk preferences of those patients. Eventually, custodians match needs with those requirements and are able to *offer* the dataset for a given bid, which can be finalized by the bidder. 
+The core idea is that data customers express preferences using digitally signed *claims* which express the need for a dataset with some given characteristics, set some intended price, and refer to *dataset specs* that detail the requirments. Specs are intended to be stored using some decentralized file system as IPFS, since they may be verbose. Then, data custodians become aware of the needs and elaborate the anonymized dataset from patient data taking into account the risk preferences of those patients. Eventually, custodians match needs with those requirements and are able to *offer* the dataset for a given bid (and eventually with a modified data spec), which can be finalized by the bidder. 
 
 The benefits of using a blockchain setting here include:
 

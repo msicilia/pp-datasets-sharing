@@ -27,7 +27,7 @@ contract DatasetBidRegistry is Ownable {
    */
    struct Bid{
        string expiry_date; // Standard human readable date, ISO 8601 UTC
-       bytes hash_spec;    // IPFS address to the claim file. 
+       bytes hash_spec;    // IPFS address to the claim file of the dataset specs of the bid. 
        uint amount;        // Amount in wei for the bid.
        string tag;	      // Keyword
    }
@@ -39,6 +39,7 @@ contract DatasetBidRegistry is Ownable {
       address payable offerer;  // address of the offerer. .  
       address bidder;   // bidder and bid_number identify the bid.
       uint bid_number;
+      bytes hash_spec;    // IPFS address to the claim file of the dataset specs of the offer.
       uint value;       // price proposed, in wei.
       bool completed;
    }
@@ -93,8 +94,8 @@ contract DatasetBidRegistry is Ownable {
    * Expiry dates of bids are considered informative and not checked inside the contract,
    * it is expected that clients do the check. 
    */
-   function offer(address payable offerer, address bidder, uint bidno, uint price) public {
-         offers[bidder][bidno].push(Offer(offerer, bidder, bidno, price, false));
+   function offer(address payable offerer, address bidder, uint bidno, bytes memory hash_spec, uint price) public {
+         offers[bidder][bidno].push(Offer(offerer, bidder, bidno, hash_spec, price, false));
          emit OfferRegistered(offerer, bidder, bidno, offers[bidder][bidno].length - 1, price);
    }
 

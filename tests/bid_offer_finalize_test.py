@@ -70,8 +70,14 @@ def test_register(registry):
 def test_offer(registry):
     '''Test the offer for a given bid.
     '''
+    # Prepare a modified data spec for the offer:
+    with open(os.path.join(os.path.dirname(__file__), "sample_dataset_spec.json"), 'r') as f:
+        spec_file = json.load(f)
+    spec_file['nrecords'] = 4500
+
     # Offer from account[2] 
-    tx = registry.offer(accounts[2], accounts[1], 0, 1005)
+    tx = registry.offer(accounts[2], accounts[1], 0, 
+                        create_signed_claim_hash(str(spec_file)), 1005)
     offerer, bidder, bid_number, offer_number, value = tx.events[0].values()
     assert(offerer==accounts[2])
     assert(bidder==accounts[1])
