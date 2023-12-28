@@ -24,8 +24,15 @@ In addition to the dependencies used by Brownie, the tests require the following
 * `base58==2.1.0`
 * `pytest-order==0.11.0`
 * `ecdsa==0.16.1`
+
 ## More info
 
 The complete design is in the document:
  
 * Rodríguez García, M., Sicilia, M.A. & Dodero, J.M. (2021) *A privacy preserving design for sharing demand-driven patient datasets over permissioned blockchains and P2P secure transfer* (unpublished manuscript).
+
+## About the project funding
+
+This research & development is part of the project CRÊPES (ref. PID2020-115844RB-I00), funded by MCIN/AEI/10.13039/501100011033/.
+
+
